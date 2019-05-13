@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "438017652733",
+    "firebase_url": "https://eficacia-app.firebaseio.com",
+    "project_id": "eficacia-app",
+    "storage_bucket": "eficacia-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:438017652733:android:76eb9c55be0ff347",
+        "android_client_info": {
+          "package_name": "com.shourai.eficacia_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "438017652733-uhmbvp7ljdtklh476i8h8u046c8dtiro.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDqIvrSiyxsWbLMwOCQl4TWvyE7oaF-Wxc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "438017652733-uhmbvp7ljdtklh476i8h8u046c8dtiro.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

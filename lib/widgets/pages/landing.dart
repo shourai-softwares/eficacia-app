@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dashboard.dart';
+import 'registration.dart';
 
 class LandingScreen extends StatelessWidget {
 
@@ -20,16 +21,22 @@ class LandingScreen extends StatelessWidget {
               'texto',
             ),
             RaisedButton(
-              child: Text('Teste'),
+              child: Text('Cadastre-se'),
+              onPressed: () {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => RegistrationScreen())
+                );
+              },
+            ),
+            RaisedButton(
+              child: Text('Login'),
               onPressed: () {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(builder: (context) => DashboardScreen())
                 );
               },
-            ),
-            RaisedButton(
-              child: Text('Teste'),
             ),
           ],
         ),

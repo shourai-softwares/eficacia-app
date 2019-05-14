@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../organisms/TicketCard.dart';
+import '../organisms/ticket_card.dart';
 
 class CardList extends StatelessWidget {
   @override

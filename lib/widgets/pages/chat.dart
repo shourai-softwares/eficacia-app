@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../atoms/bubble.dart';
 
 class ChatScreen extends StatelessWidget {
@@ -10,14 +11,21 @@ class ChatScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
-          Column(
-            children: [
-              Bubble(message: 'teste\nrwa', time: 'today', delivered: true, isMe: true),
-              Bubble(message: 'teste', time: 'today', delivered: true, isMe: false),
-              Bubble(message: 'teste', time: 'today', delivered: true, isMe: true),
-              Bubble(message: 'teste', time: 'today', delivered: true, isMe: false),
-              Bubble(message: 'teste', time: 'today', delivered: true, isMe: true),
-            ],
+          StreamBuilder<QuerySnapshot>(
+          stream: Firestore.instance.collection('chats').snapshots(),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) return Text('${snapshot.error}');
+              switch (snapshot.connectionState) {
+                case ConnectionState.waiting:
+                  return new Center(child: Text('loading'));
+                default:
+                  return new Column(
+                    children: snapshot.data.documents.map((DocumentSnapshot document) {
+                      return Bubble(message: 'teste\nrwa', time: 'today', delivered: true, isMe: true);
+                    }).toList(),
+                  );
+              }
+            }
           ),
           TextField(
             decoration: InputDecoration(

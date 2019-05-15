@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
+import 'dashboard.dart';
 
-class DashboardScreen extends StatelessWidget {
+class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Dashboard'),
+        title: Text('Login'),
       ),
-      body: Center(
-        child: Column(
-          children: <Widget>[
-            Text(
-              'titulo',
-            ),
-          ],
-        ),
-      ),
+      body: RaisedButton(
+        onPressed: () => Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => DashboardScreen())
+        )
+      )
     );
   }
 }

@@ -9,7 +9,7 @@ class ChatScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('chat'),
       ),
-      body: Column(
+      body: Stack(
         children: [
           StreamBuilder<QuerySnapshot>(
           stream: Firestore.instance.collection('chats').snapshots(),
@@ -27,10 +27,15 @@ class ChatScreen extends StatelessWidget {
               }
             }
           ),
-          TextField(
-            decoration: InputDecoration(
-                border: InputBorder.none,
-                hintText: 'Please enter a search term'
+          Align(
+            alignment: Alignment.bottomRight,
+            child: Container(
+              padding: EdgeInsets.all(2.0),
+              decoration: BoxDecoration(border: Border.all(color: Color(0xCC000000))),
+              child: Row(children: [
+                Expanded(child:TextField()),
+                RaisedButton(child: Text('Enviar'), onPressed: () => null),
+              ]),
             ),
           ),
         ]

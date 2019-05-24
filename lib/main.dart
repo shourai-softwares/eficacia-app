@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import './widgets/pages/dashboard.dart';
 import './widgets/pages/landing.dart';
 
 void main() => runApp(MyApp());
@@ -44,21 +45,20 @@ class MyAppState extends State<MyApp> {
   }
 
   Widget getCurrentArea() {
+    Widget screen;
+
     switch (status) {
       case AuthStatus.UNKNOWN:
-        return Text('un');
+        screen = Text('un');
         break;
       case AuthStatus.AUTHENTICATED:
-        return RaisedButton(
-          child: Text('Out'),
-          onPressed: () {
-            FirebaseAuth.instance.signOut();
-          },
-        );
+        screen = DashboardScreen();
         break;
       case AuthStatus.UNAUTHENTICATED:
-        return LandingScreen();
+        screen = LandingScreen();
         break;
     }
+
+    return screen;
   }
 }

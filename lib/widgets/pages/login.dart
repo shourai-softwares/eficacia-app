@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../../services/authentication.dart';
+import '../molecules/form_input.dart';
+import '../atoms/loader_overlay.dart';
+import '../atoms/default_button.dart';
+import '../atoms/default_flat_button.dart';
 
 class LoginScreen extends StatefulWidget {
   LoginScreen({this.auth, this.onSignedIn});
@@ -33,14 +38,16 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    _isIos = Theme.of(context).platform == TargetPlatform.iOS;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Login'),
       ),
-      body: Stack(children: [
-        _showBody(),
-        _showCircularProgress(),
-      ]),
+      body: LoaderOverlay(
+        child: _showBody(),
+        show: _isLoading,
+      ),
     );
   }
 
@@ -61,22 +68,40 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _showBody(){
-    return new Container(
-        padding: EdgeInsets.all(16.0),
-        child: new Form(
-          key: _formKey,
-          child: new ListView(
-            shrinkWrap: true,
-            children: <Widget>[
-              _showLogo(),
-              _showEmailInput(),
-              _showPasswordInput(),
-              _showPrimaryButton(),
-              _showSecondaryButton(),
-              _showErrorMessage(),
-            ],
-          ),
-        ));
+    return Container(
+      padding: EdgeInsets.all(16.0),
+      child: Form(
+        key: _formKey,
+        child: ListView(
+          shrinkWrap: true,
+          children: [
+            FormInput(
+              icon: Icons.mail,
+              hintText: 'Email',
+              keyboardType: TextInputType.emailAddress,
+              validator: (value) => value.isEmpty ? 'Email can\'t be empty' : null,
+              onSaved: (value) => _email = value,
+            ),
+            FormInput(
+              icon: Icons.lock,
+              hintText: 'Password',
+              obscureText: true,
+              validator: (value) => value.isEmpty ? 'Password can\'t be empty' : null,
+              onSaved: (value) => _password = value,
+            ),
+            DefaultButton(
+              text: _formMode == FormMode.LOGIN ? 'Login' : 'Create Account',
+              onPressed: _validateAndSubmit,
+            ),
+            DefaultFlatButton(
+              text: _formMode == FormMode.LOGIN ? 'Create an account' : 'Have an account? Sign in',
+              onPressed: _formMode == FormMode.LOGIN ? _changeFormToSignUp : _changeFormToLogin,
+            ),
+            _showErrorMessage(),
+          ],
+        ),
+      )
+    );
   }
 
   Widget _showErrorMessage() {
@@ -96,97 +121,6 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  Widget _showSecondaryButton() {
-    return new FlatButton(
-      child: _formMode == FormMode.LOGIN
-          ? new Text('Create an account',
-          style: new TextStyle(fontSize: 18.0, fontWeight: FontWeight.w300))
-          : new Text('Have an account? Sign in',
-          style:
-          new TextStyle(fontSize: 18.0, fontWeight: FontWeight.w300)),
-      onPressed: _formMode == FormMode.LOGIN
-          ? _changeFormToSignUp
-          : _changeFormToLogin,
-    );
-  }
-
-  Widget _showPrimaryButton() {
-    return new Padding(
-        padding: EdgeInsets.fromLTRB(0.0, 45.0, 0.0, 0.0),
-        child: new MaterialButton(
-          elevation: 5.0,
-          minWidth: 200.0,
-          height: 42.0,
-          color: Colors.blue,
-          child: _formMode == FormMode.LOGIN
-              ? new Text('Login',
-              style: new TextStyle(fontSize: 20.0, color: Colors.white))
-              : new Text('Create account',
-              style: new TextStyle(fontSize: 20.0, color: Colors.white)),
-          onPressed: _validateAndSubmit,
-        ));
-  }
-
-  Widget _showEmailInput() {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(0.0, 100.0, 0.0, 0.0),
-      child: new TextFormField(
-        maxLines: 1,
-        keyboardType: TextInputType.emailAddress,
-        autofocus: false,
-        decoration: new InputDecoration(
-            hintText: 'Email',
-            icon: new Icon(
-              Icons.mail,
-              color: Colors.grey,
-            )),
-        validator: (value) => value.isEmpty ? 'Email can\'t be empty' : null,
-        onSaved: (value) => _email = value,
-      ),
-    );
-  }
-
-  Widget _showPasswordInput() {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
-      child: new TextFormField(
-        maxLines: 1,
-        obscureText: true,
-        autofocus: false,
-        decoration: new InputDecoration(
-            hintText: 'Password',
-            icon: new Icon(
-              Icons.lock,
-              color: Colors.grey,
-            )),
-        validator: (value) => value.isEmpty ? 'Password can\'t be empty' : null,
-        onSaved: (value) => _password = value,
-      ),
-    );
-  }
-
-  Widget _showLogo() {
-    return new Hero(
-      tag: 'hero',
-      child: Padding(
-        padding: EdgeInsets.fromLTRB(0.0, 70.0, 0.0, 0.0),
-        child: CircleAvatar(
-          backgroundColor: Colors.transparent,
-          radius: 48.0,
-          child: Text('T'),
-        ),
-      ),
-    );
-  }
-
-  Widget _showCircularProgress(){
-    if (_isLoading) {
-      return Center(child: CircularProgressIndicator());
-    }
-
-    return Container(height: 0.0, width: 0.0,);
-  }
-
   bool _validateAndSave() {
     final form = _formKey.currentState;
     if (form.validate()) {
@@ -201,29 +135,38 @@ class _LoginScreenState extends State<LoginScreen> {
       _errorMessage = "";
       _isLoading = true;
     });
-    if (_validateAndSave()) {
-      String userId = "";
-      try {
-        if (_formMode == FormMode.LOGIN) {
-          userId = await widget.auth.signIn(_email, _password);
-          print('Signed in: $userId');
-        } else {
-          userId = await widget.auth.signUp(_email, _password);
-          print('Signed up user: $userId');
-        }
-        if (userId.length > 0 && userId != null) {
-          widget.onSignedIn();
-        }
-      } catch (e) {
-        print('Error: $e');
-        setState(() {
-          _isLoading = false;
-          if (_isIos) {
-            _errorMessage = e.details;
-          } else
-            _errorMessage = e.message;
-        });
+
+    if (!_validateAndSave()) {
+      return;
+    }
+
+    FirebaseAuth auth = FirebaseAuth.instance;
+    String userId = "";
+
+    try {
+      if (_formMode == FormMode.LOGIN) {
+        FirebaseUser user = await auth.signInWithEmailAndPassword(email: _email, password: _password);
+        userId = user.uid;
+        print('Signed in: $userId');
+      } else {
+        FirebaseUser user = await auth.createUserWithEmailAndPassword(email: _email, password: _password);
+        userId = user.uid;
+        print('Signed up user: $userId');
       }
+
+      if (userId.length > 0 && userId != null) {
+        debugPrint(userId);
+        Navigator.pop(context);
+      }
+    } catch (e) {
+      print('Error: $e');
+      setState(() {
+        _isLoading = false;
+        if (_isIos) {
+          _errorMessage = e.details;
+        } else
+          _errorMessage = e.message;
+      });
     }
   }
 }

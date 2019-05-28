@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import './widgets/pages/dashboard.dart';
 import './widgets/pages/landing.dart';
+import './state/AuthModel.dart';
 
 void main() => runApp(MyApp());
 
@@ -14,6 +16,7 @@ class MyApp extends StatefulWidget {
 }
 
 class MyAppState extends State<MyApp> {
+  final AuthModel authModel = AuthModel();
   final FirebaseAuth auth = FirebaseAuth.instance;
   AuthStatus status = AuthStatus.UNKNOWN;
 
@@ -28,6 +31,7 @@ class MyAppState extends State<MyApp> {
           status = AuthStatus.UNAUTHENTICATED;
         } else {
           status = AuthStatus.AUTHENTICATED;
+          authModel.setUser(firebaseUser);
         }
       });
     });
@@ -35,12 +39,15 @@ class MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Eficacia Contabilidade',
-      theme: ThemeData(
-        primarySwatch: Colors.deepOrange,
+    return ScopedModel<AuthModel>(
+      model: authModel,
+      child: MaterialApp(
+        title: 'Eficacia Contabilidade',
+        theme: ThemeData(
+          primarySwatch: Colors.deepOrange,
+        ),
+        home: getCurrentArea(),
       ),
-      home: getCurrentArea(),
     );
   }
 

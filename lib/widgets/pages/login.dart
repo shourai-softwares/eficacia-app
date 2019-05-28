@@ -1,17 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../../services/authentication.dart';
 import '../molecules/form_input.dart';
 import '../atoms/loader_overlay.dart';
 import '../atoms/default_button.dart';
 import '../atoms/default_flat_button.dart';
 
 class LoginScreen extends StatefulWidget {
-  LoginScreen({this.auth, this.onSignedIn});
-
-  final BaseAuth auth;
-  final VoidCallback onSignedIn;
-
   @override
   State<LoginScreen> createState() => new _LoginScreenState();
 }

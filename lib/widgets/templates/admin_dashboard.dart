@@ -21,7 +21,7 @@ class AdminDashboard extends StatelessWidget {
               Center(
                 child: Column(
                   children: <Widget>[
-                    Text('titualao'),
+                   Text('nope'),
                   ],
                 ),
               ),

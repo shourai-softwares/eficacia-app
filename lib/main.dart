@@ -25,7 +25,6 @@ class MyAppState extends State<MyApp> {
     super.initState();
 
     auth.onAuthStateChanged.listen((firebaseUser) {
-      debugPrint('fbUser: $firebaseUser');
       setState(() {
         if (firebaseUser == null) {
           status = AuthStatus.UNAUTHENTICATED;

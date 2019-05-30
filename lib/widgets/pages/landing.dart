@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'login.dart';
-import 'registration.dart';
+import '../atoms/default_button.dart';
+import 'auth.dart';
 
 class LandingScreen extends StatelessWidget {
 
@@ -20,21 +20,21 @@ class LandingScreen extends StatelessWidget {
             Text(
               'texto',
             ),
-            RaisedButton(
-              child: Text('Cadastre-se'),
+            DefaultButton(
+              text: 'Cadastre-se',
               onPressed: () {
                 Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => RegistrationScreen())
+                    MaterialPageRoute(builder: (context) => AuthScreen(mode: FormMode.SIGNUP))
                 );
               },
             ),
-            RaisedButton(
-              child: Text('Login'),
+            DefaultButton(
+              text: 'Login',
               onPressed: () {
                 Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => LoginScreen())
+                    MaterialPageRoute(builder: (context) => AuthScreen(mode: FormMode.LOGIN))
                 );
               },
             ),

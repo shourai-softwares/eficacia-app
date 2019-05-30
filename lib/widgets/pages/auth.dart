@@ -3,23 +3,25 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../molecules/form_input.dart';
 import '../atoms/loader_overlay.dart';
 import '../atoms/default_button.dart';
-import '../atoms/default_flat_button.dart';
-
-class LoginScreen extends StatefulWidget {
-  @override
-  State<LoginScreen> createState() => new _LoginScreenState();
-}
 
 enum FormMode { LOGIN, SIGNUP }
 
-class _LoginScreenState extends State<LoginScreen> {
-  final _formKey = new GlobalKey<FormState>();
+class AuthScreen extends StatefulWidget {
+  final FormMode mode;
+
+  AuthScreen({ this.mode });
+
+  @override
+  State<AuthScreen> createState() => _AuthScreenState();
+}
+
+class _AuthScreenState extends State<AuthScreen> {
+  final _formKey = GlobalKey<FormState>();
 
   String _email;
   String _password;
   String _errorMessage;
 
-  FormMode _formMode = FormMode.LOGIN;
   bool _isIos;
   bool _isLoading;
 
@@ -45,22 +47,6 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  void _changeFormToSignUp() {
-    _formKey.currentState.reset();
-    _errorMessage = "";
-    setState(() {
-      _formMode = FormMode.SIGNUP;
-    });
-  }
-
-  void _changeFormToLogin() {
-    _formKey.currentState.reset();
-    _errorMessage = "";
-    setState(() {
-      _formMode = FormMode.LOGIN;
-    });
-  }
-
   Widget _showBody(){
     return Container(
       padding: EdgeInsets.all(16.0),
@@ -84,12 +70,8 @@ class _LoginScreenState extends State<LoginScreen> {
               onSaved: (value) => _password = value,
             ),
             DefaultButton(
-              text: _formMode == FormMode.LOGIN ? 'Login' : 'Create Account',
+              text: this.widget.mode == FormMode.LOGIN ? 'Login' : 'Create Account',
               onPressed: _validateAndSubmit,
-            ),
-            DefaultFlatButton(
-              text: _formMode == FormMode.LOGIN ? 'Create an account' : 'Have an account? Sign in',
-              onPressed: _formMode == FormMode.LOGIN ? _changeFormToSignUp : _changeFormToLogin,
             ),
             _showErrorMessage(),
           ],
@@ -138,7 +120,7 @@ class _LoginScreenState extends State<LoginScreen> {
     String userId = "";
 
     try {
-      if (_formMode == FormMode.LOGIN) {
+      if (this.widget.mode == FormMode.LOGIN) {
         FirebaseUser user = await auth.signInWithEmailAndPassword(email: _email, password: _password);
         userId = user.uid;
         print('Signed in: $userId');

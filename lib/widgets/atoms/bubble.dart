@@ -8,20 +8,20 @@ class Bubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bg = isMe ? Colors.white : Colors.greenAccent.shade100;
-    final align = isMe ? CrossAxisAlignment.start : CrossAxisAlignment.end;
+    final bg = isMe ? Colors.greenAccent.shade100 : Colors.white;
+    final align = isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start;
     final icon = delivered ? Icons.done_all : Icons.done;
     final radius = isMe
         ? BorderRadius.only(
-      topRight: Radius.circular(5.0),
-      bottomLeft: Radius.circular(10.0),
-      bottomRight: Radius.circular(5.0),
-    )
+          topLeft: Radius.circular(5.0),
+          bottomLeft: Radius.circular(5.0),
+          bottomRight: Radius.circular(10.0),
+        )
         : BorderRadius.only(
-      topLeft: Radius.circular(5.0),
-      bottomLeft: Radius.circular(5.0),
-      bottomRight: Radius.circular(10.0),
-    );
+          topRight: Radius.circular(5.0),
+          bottomLeft: Radius.circular(10.0),
+          bottomRight: Radius.circular(5.0),
+        );
     return Column(
       crossAxisAlignment: align,
       children: <Widget>[

@@ -3,8 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AuthModel extends Model {
-  final _profileCollection = Firestore.instance.collection('profiles');
-  final _ticketCollection = Firestore.instance.collection('tickets');
+  final profileCollection = Firestore.instance.collection('profiles');
+  final ticketCollection = Firestore.instance.collection('tickets');
 
   FirebaseUser _user;
   DocumentReference _profileRef;
@@ -20,23 +20,25 @@ class AuthModel extends Model {
 
   void setUser(FirebaseUser user) async {
     _user = user;
-    final query = await _profileCollection
+    final query = await profileCollection
       .where('user', isEqualTo: _user.uid)
       .getDocuments();
 
     if (query.documents.isEmpty) {
       final newProfile = Map<String, dynamic>();
       newProfile['user'] = _user.uid;
-      _profileRef = await _profileCollection.add(newProfile);
+      _profileRef = await profileCollection.add(newProfile);
       _profile = await _profileRef.get();
     } else {
       _profile = query.documents.first;
       _profileRef = _profile.reference;
 
-      final ticketQuery = await _ticketCollection
-          .where('client', isEqualTo: _user.uid)
+      final ticketQuery = await ticketCollection
+          .where('client.id', isEqualTo: _user.uid)
           .getDocuments();
-      _ticketRef = ticketQuery.documents.first.reference;
+      if (ticketQuery.documents.isNotEmpty) {
+        _ticketRef = ticketQuery.documents.first.reference;
+      }
     }
     _isAdmin = _profile.data.containsKey('isAdmin') && _profile.data['isAdmin'];
 
@@ -54,12 +56,17 @@ class AuthModel extends Model {
     _profile = await _profileRef.get();
 
     var newTicket = Map<String, dynamic>();
+    var ticketClientInfo = Map<String, dynamic>();
 
-    newTicket['client'] = _user.uid;
+    ticketClientInfo['id'] = _user.uid;
+    ticketClientInfo['name'] = name;
+    ticketClientInfo['phone'] = phone;
+
+    newTicket['client'] = ticketClientInfo;
     newTicket['service'] = service;
     newTicket['messages'] = [];
 
-    _ticketRef = await _ticketCollection.add(newTicket);
+    _ticketRef = await ticketCollection.add(newTicket);
 
     notifyListeners();
   }

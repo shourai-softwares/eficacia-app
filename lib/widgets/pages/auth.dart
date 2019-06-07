@@ -57,20 +57,20 @@ class _AuthScreenState extends State<AuthScreen> {
           children: [
             FormInput(
               icon: Icons.mail,
-              hintText: 'Email',
+              hintText: 'E-mail',
               keyboardType: TextInputType.emailAddress,
-              validator: (value) => value.isEmpty ? 'Email can\'t be empty' : null,
+              validator: (value) => value.isEmpty ? 'O e-mail deve ser informado' : null,
               onSaved: (value) => _email = value,
             ),
             FormInput(
               icon: Icons.lock,
-              hintText: 'Password',
+              hintText: 'Senha',
               obscureText: true,
-              validator: (value) => value.isEmpty ? 'Password can\'t be empty' : null,
+              validator: (value) => value.isEmpty ? 'A senha deve ser informada' : null,
               onSaved: (value) => _password = value,
             ),
             DefaultButton(
-              text: this.widget.mode == FormMode.LOGIN ? 'Login' : 'Create Account',
+              text: this.widget.mode == FormMode.LOGIN ? 'Login' : 'Criar Conta',
               onPressed: _validateAndSubmit,
             ),
             _showErrorMessage(),

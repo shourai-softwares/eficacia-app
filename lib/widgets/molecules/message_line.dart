@@ -23,7 +23,7 @@ class MessageLine extends StatelessWidget {
                 message: message['content'],
                 delivered: true,
                 isMe: sentByMe,
-                time: 'alala'
+                time: message['sentOn'] ?? 'time',
             ),
           ]
         );

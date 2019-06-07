@@ -11,8 +11,25 @@ class RegistrationScreen extends StatefulWidget {
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
   final _formKey = GlobalKey<FormState>();
-  final List _cities = ["Cluj-Napoca", "Bucuresti", "Timisoara", "Brasov", "Constanta"];
-  var _currentValue = "Cluj-Napoca";
+  final List _cities = [
+    "Abertura de Empresa",
+    "Contabilidade",
+    "Alteração de empresa",
+    "Regularização de empresa",
+    "Baixa de empresa",
+    "Alvará",
+    "Inscrição Estadual",
+    "CNPJ",
+    "MEI",
+    "Micro Empresa",
+    "Impostos",
+    "Declaração de faturamento",
+    "Imposto de Renda",
+    "Decore",
+    "Registro de funcionário",
+    "Nota Fiscal",
+  ];
+  var _currentValue = "Abertura de Empresa";
 
   String _name;
   String _phone;
@@ -23,38 +40,48 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       appBar: AppBar(
         title: Text('Complete seus dados'),
       ),
-      body: Padding(
-        padding: EdgeInsets.all(10),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: <Widget>[
-              FormInput(
-                hintText: 'Nome Completo',
-                icon: Icons.person,
-                onSaved: (value) => _name = value,
+      body: ListView(
+        children: [
+          Padding(
+            padding: EdgeInsets.all(15),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: <Widget>[
+                  FormInput(
+                    hintText: 'Nome Completo',
+                    icon: Icons.person,
+                    onSaved: (value) => _name = value,
+                  ),
+                  FormInput(
+                    hintText: 'Celular',
+                    icon: Icons.phone_android,
+                    onSaved: (value) => _phone = value,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 15),
+                    child: Text('No que podemos te ajudar?', style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    )),
+                  ),
+                  DropdownButton(
+                    value: _currentValue,
+                    items: _getDropDownMenuItems(),
+                    onChanged: (selected) => setState(() {
+                      _currentValue = selected;
+                    }),
+                  ),
+                  ScopedModelDescendant<AuthModel>(
+                    builder: (context, child, model) => DefaultButton(
+                      text: 'Salvar',
+                      onPressed: () => _handleSubmit(model),
+                    ),
+                  ),
+                ],
               ),
-              FormInput(
-                hintText: 'Celular',
-                icon: Icons.phone_android,
-                onSaved: (value) => _phone = value,
-              ),
-              DropdownButton(
-                value: _currentValue,
-                items: _getDropDownMenuItems(),
-                onChanged: (selected) => setState(() {
-                  _currentValue = selected;
-                }),
-              ),
-              ScopedModelDescendant<AuthModel>(
-                builder: (context, child, model) => DefaultButton(
-                  text: 'Salvar',
-                  onPressed: () => _handleSubmit(model),
-                ),
-              ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

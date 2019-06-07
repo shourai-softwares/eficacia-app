@@ -16,10 +16,13 @@ class MessageInputState extends State<MessageInput> {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(2.0),
-      decoration: BoxDecoration(border: Border.all(color: Color(0xCC000000))),
+      decoration: BoxDecoration(
+        boxShadow: [BoxShadow(blurRadius: 2.0, color: Colors.deepOrangeAccent.shade200)],
+        color: Colors.white,
+      ),
       child: Row(children: [
         Expanded(child: TextField(controller: _controller)),
-        RaisedButton(child: Text('Enviar'), onPressed: _sendMessage),
+        IconButton(icon: Icon(Icons.send, color: Colors.deepOrangeAccent), onPressed: _sendMessage),
       ]),
     );
   }

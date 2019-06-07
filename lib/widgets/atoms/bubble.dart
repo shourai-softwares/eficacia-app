@@ -8,7 +8,7 @@ class Bubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bg = isMe ? Colors.greenAccent.shade100 : Colors.white;
+    final bg = isMe ? Colors.deepOrangeAccent.shade100 : Colors.white;
     final align = isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start;
     final icon = delivered ? Icons.done_all : Icons.done;
     final radius = isMe
@@ -38,31 +38,28 @@ class Bubble extends StatelessWidget {
             color: bg,
             borderRadius: radius,
           ),
-          child: Stack(
+          child: Column(
+            crossAxisAlignment: isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
             children: <Widget>[
+              Row(
+                children: <Widget>[
+                  Text(time,
+                      style: TextStyle(
+                        color: Colors.black38,
+                        fontSize: 10.0,
+                      )),
+                  SizedBox(width: 3.0),
+//                    Icon(
+//                      icon,
+//                      size: 12.0,
+//                      color: Colors.black38,
+//                    )
+                ],
+              ),
               Padding(
-                padding: EdgeInsets.only(right: 48.0),
+                padding: EdgeInsets.all(5.0),
                 child: Text(message),
               ),
-              Positioned(
-                bottom: 0.0,
-                right: 0.0,
-                child: Row(
-                  children: <Widget>[
-                    Text(time,
-                        style: TextStyle(
-                          color: Colors.black38,
-                          fontSize: 10.0,
-                        )),
-                    SizedBox(width: 3.0),
-                    Icon(
-                      icon,
-                      size: 12.0,
-                      color: Colors.black38,
-                    )
-                  ],
-                ),
-              )
             ],
           ),
         )

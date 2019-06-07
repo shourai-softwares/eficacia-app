@@ -4,8 +4,9 @@ import '../molecules/message_line.dart';
 
 class MessageList extends StatelessWidget {
   final DocumentReference chatRef;
+  final ScrollController controller;
 
-  MessageList({ this.chatRef });
+  MessageList({ this.chatRef, this.controller });
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +22,10 @@ class MessageList extends StatelessWidget {
             default:
               List<dynamic> messages = snapshot.data.data['messages'];
               return ListView(
-                children: messages.map((message) => MessageLine(message)).toList(),
+                controller: controller,
+                shrinkWrap: true,
+                reverse: true,
+                children: messages.reversed.map((message) => MessageLine(message)).toList(),
               );
           }
         }

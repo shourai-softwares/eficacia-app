@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 class DefaultButton extends StatelessWidget {
   final String text;
   final Function onPressed;
+  final color;
 
-  DefaultButton({ this.text, this.onPressed });
+  DefaultButton({ this.text, this.onPressed, this.color });
 
   @override
   Widget build(BuildContext context) {

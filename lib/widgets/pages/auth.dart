@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../molecules/form_input.dart';
 import '../atoms/loader_overlay.dart';
@@ -73,6 +75,14 @@ class _AuthScreenState extends State<AuthScreen> {
               text: this.widget.mode == FormMode.LOGIN ? 'Login' : 'Criar Conta',
               onPressed: _validateAndSubmit,
             ),
+            DefaultButton(
+              text: this.widget.mode == FormMode.LOGIN ? 'Login' : 'Entrar com Facebook',
+              onPressed: _loginWithFacebook,
+            ),
+            DefaultButton(
+              text: this.widget.mode == FormMode.LOGIN ? 'Login' : 'Entrar com Google',
+              onPressed: _loginWithGoogle,
+            ),
             _showErrorMessage(),
           ],
         ),
@@ -104,6 +114,56 @@ class _AuthScreenState extends State<AuthScreen> {
       return true;
     }
     return false;
+  }
+
+  _loginWithGoogle() async {
+    setState(() {
+      _errorMessage = "";
+      _isLoading = true;
+    });
+
+    final goLogin = GoogleSignIn();
+    final sigIn = await goLogin.signIn().catchError((error) {
+      setState(() {
+        _errorMessage = error;
+        _isLoading = false;
+      });
+    });
+    final auth = await sigIn.authentication;
+
+    final credential = GoogleAuthProvider.getCredential(
+        idToken: auth.idToken,
+        accessToken: auth.accessToken
+    );
+
+    await FirebaseAuth.instance.signInWithCredential(credential);
+    Navigator.pop(context);
+  }
+
+  _loginWithFacebook() async {
+    setState(() {
+      _errorMessage = "";
+      _isLoading = true;
+    });
+
+    final fbLogin = FacebookLogin();
+    final res = await fbLogin.logInWithReadPermissions(['email', 'public_profile']);
+
+    switch (res.status) {
+      case FacebookLoginStatus.loggedIn:
+        final credential = FacebookAuthProvider.getCredential(accessToken: res.accessToken.token);
+        FirebaseAuth.instance.signInWithCredential(credential);
+        Navigator.pop(context);
+        return;
+      case FacebookLoginStatus.cancelledByUser:
+      case FacebookLoginStatus.error:
+        print(res.errorMessage);
+        setState(() {
+          _errorMessage = "Login com facebook falhou";
+          _isLoading = false;
+        });
+        return;
+    }
   }
 
   _validateAndSubmit() async {

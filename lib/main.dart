@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
+import './widgets/molecules/loading_screen.dart';
 import './widgets/pages/dashboard.dart';
 import './widgets/pages/landing.dart';
 import './state/AuthModel.dart';
@@ -55,7 +55,7 @@ class MyAppState extends State<MyApp> {
 
     switch (status) {
       case AuthStatus.UNKNOWN:
-        screen = Text('un');
+        screen = LoadingScreen();
         break;
       case AuthStatus.AUTHENTICATED:
         screen = DashboardScreen();

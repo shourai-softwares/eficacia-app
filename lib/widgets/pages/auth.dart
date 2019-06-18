@@ -78,10 +78,12 @@ class _AuthScreenState extends State<AuthScreen> {
             DefaultButton(
               text: this.widget.mode == FormMode.LOGIN ? 'Login' : 'Entrar com Facebook',
               onPressed: _loginWithFacebook,
+              variant: DefaultButton.FACEBOOK,
             ),
             DefaultButton(
               text: this.widget.mode == FormMode.LOGIN ? 'Login' : 'Entrar com Google',
               onPressed: _loginWithGoogle,
+              variant: DefaultButton.GOOGLE,
             ),
             _showErrorMessage(),
           ],

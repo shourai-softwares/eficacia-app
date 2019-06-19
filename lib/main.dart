@@ -61,6 +61,7 @@ class MyAppState extends State<MyApp> {
     firebaseCloudMessagingListeners();
 
     auth.onAuthStateChanged.listen((firebaseUser) {
+      print('changed');
       setState(() {
         if (firebaseUser == null) {
           status = AuthStatus.UNAUTHENTICATED;
@@ -82,6 +83,7 @@ class MyAppState extends State<MyApp> {
           primarySwatch: Colors.deepOrange,
         ),
         home: getCurrentArea(),
+        debugShowCheckedModeBanner: false,
       ),
     );
   }

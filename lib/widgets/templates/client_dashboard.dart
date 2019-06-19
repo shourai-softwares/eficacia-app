@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import '../organisms/ticket_card.dart';
-import '../pages/chat.dart';
 import '../pages/registration.dart';
+import '../pages/whatsapp.dart';
 import '../../state/AuthModel.dart';
 
 class ClientDashboard extends StatelessWidget {
@@ -11,7 +11,7 @@ class ClientDashboard extends StatelessWidget {
     return ScopedModelDescendant<AuthModel>(
       builder: (context, child, model) {
         if (model.profile.data.containsKey('phone') && model.profile.data['phone'] != null) {
-          return ChatScreen(chatRef: model.ticketRef);
+          return Whatsapp(profile: model.profile);
         } else {
           return RegistrationScreen();
         }

@@ -76,12 +76,12 @@ class _AuthScreenState extends State<AuthScreen> {
               onPressed: _validateAndSubmit,
             ),
             DefaultButton(
-              text: this.widget.mode == FormMode.LOGIN ? 'Login' : 'Entrar com Facebook',
+              text: 'Entrar com Facebook',
               onPressed: _loginWithFacebook,
               variant: DefaultButton.FACEBOOK,
             ),
             DefaultButton(
-              text: this.widget.mode == FormMode.LOGIN ? 'Login' : 'Entrar com Google',
+              text: 'Entrar com Google',
               onPressed: _loginWithGoogle,
               variant: DefaultButton.GOOGLE,
             ),
@@ -154,7 +154,7 @@ class _AuthScreenState extends State<AuthScreen> {
     switch (res.status) {
       case FacebookLoginStatus.loggedIn:
         final credential = FacebookAuthProvider.getCredential(accessToken: res.accessToken.token);
-        FirebaseAuth.instance.signInWithCredential(credential);
+        await FirebaseAuth.instance.signInWithCredential(credential);
         Navigator.pop(context);
         return;
       case FacebookLoginStatus.cancelledByUser:

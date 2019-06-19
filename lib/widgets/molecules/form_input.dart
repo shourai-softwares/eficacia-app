@@ -7,6 +7,7 @@ class FormInput extends StatelessWidget {
   final Function onSaved;
   final bool obscureText;
   final TextInputType keyboardType;
+  final TextEditingController controller;
 
 
   FormInput({
@@ -14,6 +15,7 @@ class FormInput extends StatelessWidget {
     this.hintText,
     this.validator,
     this.onSaved,
+    this.controller,
     this.obscureText = false,
     this.keyboardType = TextInputType.text,
   });
@@ -33,6 +35,7 @@ class FormInput extends StatelessWidget {
         ),
         validator: validator,
         onSaved: onSaved,
+        controller: controller,
       ),
     );
   }

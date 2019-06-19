@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:flutter_masked_text/flutter_masked_text.dart';
 import '../../state/AuthModel.dart';
 import '../molecules/form_input.dart';
 import '../atoms/default_button.dart';
@@ -33,6 +34,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   String _name;
   String _phone;
+  final controller = new MaskedTextController(mask: '(00) 00000-0000');
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +59,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     hintText: 'Celular',
                     icon: Icons.phone_android,
                     onSaved: (value) => _phone = value,
+                    controller: controller,
                   ),
                   Padding(
                     padding: EdgeInsets.only(top: 15),
